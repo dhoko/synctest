@@ -4,16 +4,15 @@ include:
     file: '/_templates-ci/public.gitlab-ci.yml'
 
 variables:
-    APP_GIT: git@github.com:ProtonMail/proton-vpn-settings.git
+    APP_GIT: git@gitlab.protontech.ch:dhoko/protonvpn-settings.git
     NODE_OPTIONS: --max-old-space-size=4096
 
 i18n-auto-pull:
     cache: {}
-    stage: i18n
     tags:
         - experimental
     only:
         - schedules
     script:
-        - ./ci-scripts/prepare-ci.sh i18n upgrade-app --limit "$I18N_APPROVED"
-    dependencies: []    
+        - ./ci-scripts/prepare-ci.sh i18n upgrade-app --sync-config protonvpn/webapp
+    dependencies: []
