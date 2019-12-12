@@ -1,3 +1,12 @@
+stages:
+    - setup
+    - test
+    - i18n
+    - deploy
+    - rpm
+    - menache
+    - bot
+
 include:
   - project: 'proton/fe/proton-config'
     ref: master
@@ -9,6 +18,7 @@ variables:
 
 i18n-auto-pull:
     cache: {}
+    stage: bot
     tags:
         - experimental
     only:
