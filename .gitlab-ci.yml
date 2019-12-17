@@ -5,7 +5,7 @@ default:
     image: ubuntu:latest
     before_script:
      - apt-get -y update
-     - apt-get install -y connect-proxy
+     - apt-get install -y connect-proxy git
      - 'which ssh-agent || apt-get -y install openssh-client'
      - eval $(ssh-agent -s)
      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
