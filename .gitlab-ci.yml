@@ -18,7 +18,7 @@ sync-app:
           - master
 
     script:
-        - git clone "$APP_GIT_CI" --depth 1 --branch master _APP_CLONE;
+        - git clone "$APP_GIT_CI" --branch master _APP_CLONE;
         - cd _APP_CLONE
         - git pull origin master
         - git remote add public git@github.com:dhoko/synctest.git
