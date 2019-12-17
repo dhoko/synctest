@@ -1,15 +1,14 @@
 stages:
-    - sync
+    - mirror
 
 include:
   - project: 'proton/fe/proton-config'
     ref: master
-    file: '/_templates-ci/public.gitlab-ci.yml'
-
+    file: '/_templates-ci/config.gitlab-ci.yml'
 
 sync-app:
     cache: {}
-    stage: sync
+    stage: mirror
     tags:
         - experimental
       # use special keywords
@@ -23,4 +22,3 @@ sync-app:
         - git remote add-url public git@github.com:dhoko/synctest.git
         - git push public master
         - git push public "$(git describe --abbrev=0)"
-    dependencies: []
