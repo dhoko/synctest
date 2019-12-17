@@ -1,28 +1,26 @@
 stages:
-    - setup
-    - test
-    - i18n
-    - deploy
-    - rpm
-    - menache
-    - bot
+    - sync
 
 include:
   - project: 'proton/fe/proton-config'
     ref: master
     file: '/_templates-ci/public.gitlab-ci.yml'
 
-variables:
-    APP_GIT: git@gitlab.protontech.ch:dhoko/protonvpn-settings.git
-    NODE_OPTIONS: --max-old-space-size=4096
 
-i18n-auto-pull:
+sync-app
     cache: {}
-    stage: bot
+    stage: sync
     tags:
         - experimental
+      # use special keywords
     only:
-        - schedules
+        - tags
+        - /^master$/
+    # use special keyword
+    except:
+      - branches
     script:
-        - ./ci-scripts/prepare-ci.sh i18n upgrade-app --sync-config protonvpn/webapp
+        - git remote add-url public git@github.com:dhoko/synctest.git
+        - git push public master
+        - git push public "$(git describe --abbrev=0)"
     dependencies: []
