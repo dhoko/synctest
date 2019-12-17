@@ -13,11 +13,10 @@ sync-app:
         - experimental
       # use special keywords
     only:
-        - tags
-        - /^master$/
-    # use special keyword
-    except:
-      - branches
+        refs:
+          - tags
+          - master
+
     script:
         - git remote add-url public git@github.com:dhoko/synctest.git
         - git push public master
