@@ -9,23 +9,19 @@ include:
 sync-app:
     cache: {}
     stage: mirror
-    tags:
-        - experimental
-      # use special keywords
     only:
         refs:
           - tags
           - master
 
     script:
-        - git clone "$APP_GIT_CI" --branch master _APP_CLONE;
+        # Clone instead of using the current CI as it creates the error (shallow update not allowed)
+        - git clone "$CI_REPOSITORY_URL" --branch master _APP_CLONE;
         - cd _APP_CLONE
-        - git pull origin master
-        - git remote add public git@github.com:dhoko/synctest.git
-        - git remote -v
-        - echo 'CURRENT BRANCH'
-        - git rev-parse --abbrev-ref HEAD
-        - echo
-        - git checkout master
+        - git remote add public $PUBLIC_REPO_URL
         - git push public master
+        # Push the latest tag we can find
         - git push public "$(git describe --abbrev=0)"
+
+variables:
+  PUBLIC_REPO_URL: https://github.com/dhoko/synctest.git
