@@ -20,5 +20,7 @@ sync-app:
     script:
         - git remote add public git@github.com:dhoko/synctest.git
         - git remote -v
+        - echo 'CURRENT BRANCH'; && echo && git rev-parse --abbrev-ref HEAD && echo
+        - git checkout master
         - git push public master
-        # - git push public "$(git describe --abbrev=0)"
+        - git push public "$(git describe --abbrev=0)"
