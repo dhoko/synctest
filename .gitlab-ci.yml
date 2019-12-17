@@ -24,4 +24,4 @@ sync-app:
         - git push public "$(git describe --abbrev=0)"
 
 variables:
-  PUBLIC_REPO_URL: https://github.com/dhoko/synctest.git
+  PUBLIC_REPO_URL: git@github.com:dhoko/synctest.git
