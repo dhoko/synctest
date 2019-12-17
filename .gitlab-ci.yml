@@ -20,5 +20,5 @@ sync-app:
     script:
         - git remote add public git@github.com:dhoko/synctest.git
         - git remote -v
-        - git push -u public master
-        - git push public "$(git describe --abbrev=0)"
+        - git push public master
+        # - git push public "$(git describe --abbrev=0)"
