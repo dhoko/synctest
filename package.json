@@ -4,23 +4,6 @@
     "description": "ProtonVPN React web application",
     "main": "index.js",
     "scripts": {
-        "start": "git update-index --assume-unchanged package-lock.json && proton-pack dev-server",
-        "lint": "eslint src --ext .js,.ts,.tsx --quiet --cache",
-        "pretty": "prettier --write  $(find src/app -type f -name '*.js' -o -name '*.ts' -o -name '*.tsx')",
-        "preversion": "git update-index --no-assume-unchanged package-lock.json",
-        "postversion": "git update-index --assume-unchanged package-lock.json && git push --tags && git push",
-        "sync:lock": "./node_modules/proton-bundler/scripts/updatePackageLock.sh",
-        "i18n:validate": "proton-i18n validate lint-functions",
-        "i18n:validate:context": "proton-i18n extract && proton-i18n validate",
-        "i18n:getlatest": "proton-i18n upgrade",
-        "i18n:upgrade": "proton-i18n extract --verbose && proton-i18n crowdin -u --verbose",
-        "deploy": "proton-bundler",
-        "deploy:standalone": "proton-bundler --appMode standalone",
-        "bundle": "cross-env NODE_ENV=production proton-pack config",
-        "postbundle": "cross-env NODE_ENV_DIST=bundle-only proton-bundler",
-        "build": "cross-env NODE_ENV=production proton-pack compile $npm_package_config_publicPathFlag",
-        "build:standalone": "cross-env NODE_ENV=production proton-pack compile --appMode=standalone",
-        "deploy:prod": "proton-bundler --remote --branch=deploy-prod",
         "check-types": "tsc"
     },
     "repository": {
