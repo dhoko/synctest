@@ -7,7 +7,7 @@ include:
     file: '/_templates-ci/public.gitlab-ci.yml'
 
 
-sync-app
+sync-app:
     cache: {}
     stage: sync
     tags:
