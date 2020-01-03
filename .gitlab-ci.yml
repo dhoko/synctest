@@ -49,24 +49,27 @@ sync-app:
     stage: mirror
     only:
         refs:
-          - tags
           - master
-
+    artifacts:
+      expire_in: 1 day
+      paths:
+      - log.txt
     script:
-        # Clone instead of using the current CI as it creates the error (shallow update not allowed)
-        - git clone "$CI_REPOSITORY_URL" --branch master _APP_CLONE;
-        - cd _APP_CLONE
-        - git remote add public $PUBLIC_REPO_URL
-        - git push public master
-        # Push the latest tag we can find
-        - git push public "$(git describe --abbrev=0)" || echo 'Already there ?'
+        - git clone git@gitlab.protontech.ch:agarroux/publish-github.git
+        - ./publish-github/sync commit --private-url $CI_REPOSITORY_URL --public-url "$PUBLIC_REPO_URL"
 
 sync-release:
     cache: {}
     stage: mirror
     needs: [build]
+    artifacts:
+      expire_in: 1 day
+      paths:
+      - log.txt
+      - request-create-curl.json
     script:
         - git clone git@gitlab.protontech.ch:agarroux/publish-github.git
+        - ./publish-github/sync tag --private-url $CI_REPOSITORY_URL --public-url "$PUBLIC_REPO_URL"
         - ./publish-github/release generate --app android-pvpn --github-repo "$(echo $PUBLIC_REPO_URL | sed -rn 's/.+:(.+)\.git/\1/p')" --github-token "$GITHUB_ACCESS_TOKEN"
 
 variables:
