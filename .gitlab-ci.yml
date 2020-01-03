@@ -65,10 +65,7 @@ sync-app:
     needs: [build]
     script:
         - git clone git@gitlab.protontech.ch:agarroux/publish-github.git
-        - |
-            echo "GITHUB_REPOSITORY: $(echo $PUBLIC_REPO_URL | sed -rn 's/.+:(.+)\.git/\1/p')" > publish-github/.env
-            echo "GITHUB_ACCESS_TOKEN: $GITHUB_ACCESS_TOKEN" >> publish-github/.env
-        - ./publish-github/release generate --app android-pvpn
+        - ./publish-github/release generate --app android-pvpn --github-repo "$(echo $PUBLIC_REPO_URL | sed -rn 's/.+:(.+)\.git/\1/p')" --github-token "$GITHUB_ACCESS_TOKEN"
 
 variables:
   PUBLIC_REPO_URL: git@github.com:dhoko/synctest.git
