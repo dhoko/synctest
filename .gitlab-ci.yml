@@ -64,7 +64,7 @@ sync-app:
     stage: mirror
     needs: [build]
     script:
-        - git clone https://gitlab.protontech.ch/agarroux/publish-github.git
+        - git clone git@gitlab.protontech.ch:agarroux/publish-github.git
         - |
             echo "GITHUB_REPOSITORY: $(echo $PUBLIC_REPO_URL | sed -rn 's/.+:(.+)\.git/\1/p')" > publish-github/.env
             echo "GITHUB_ACCESS_TOKEN: $GITHUB_ACCESS_TOKEN" >> publish-github/.env
