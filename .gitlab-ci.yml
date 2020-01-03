@@ -59,7 +59,7 @@ sync-app:
         - git remote add public $PUBLIC_REPO_URL
         - git push public master
         # Push the latest tag we can find
-        - git push public "$(git describe --abbrev=0)"
+        - git push public "$(git describe --abbrev=0)" || echo 'Already there ?'
 
 sync-release:
     cache: {}
