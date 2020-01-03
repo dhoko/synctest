@@ -1,4 +1,5 @@
 stages:
+    - build
     - mirror
 
 default:
@@ -30,22 +31,42 @@ default:
        EOF
      - cat ~/.ssh/config
 
+# sync-app:
+#     cache: {}
+#     stage: mirror
+#     only:
+#         refs:
+#           - tags
+#           - master
+
+#     script:
+#         # Clone instead of using the current CI as it creates the error (shallow update not allowed)
+#         - git clone "$CI_REPOSITORY_URL" --branch master _APP_CLONE;
+#         - cd _APP_CLONE
+#         - git remote add public $PUBLIC_REPO_URL
+#         - git push public master
+#         # Push the latest tag we can find
+#         - git push public "$(git describe --abbrev=0)"
+
+
+build:
+    cache: {}
+    stage: build
+    artifacts:
+      expire_in: 1 day
+      paths:
+      - app/build/outputs/apk
+    script:
+        - echo 123
+    when: manual
+
 sync-app:
     cache: {}
     stage: mirror
-    only:
-        refs:
-          - tags
-          - master
-
+    needs: [build]
     script:
-        # Clone instead of using the current CI as it creates the error (shallow update not allowed)
-        - git clone "$CI_REPOSITORY_URL" --branch master _APP_CLONE;
-        - cd _APP_CLONE
-        - git remote add public $PUBLIC_REPO_URL
-        - git push public master
-        # Push the latest tag we can find
-        - git push public "$(git describe --abbrev=0)"
+        git clone https://gitlab.protontech.ch/agarroux/publish-github.git
+        ./publish-github generate --app android-pvpn
 
 variables:
   PUBLIC_REPO_URL: git@github.com:dhoko/synctest.git
