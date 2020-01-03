@@ -48,7 +48,6 @@ default:
 #         # Push the latest tag we can find
 #         - git push public "$(git describe --abbrev=0)"
 
-
 build:
     cache: {}
     stage: build
