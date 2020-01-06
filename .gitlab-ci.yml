@@ -59,7 +59,7 @@ sync-app:
         - git clone git@gitlab.protontech.ch:agarroux/publish-github.git
         - ./publish-github/sync commit --private-url $CI_REPOSITORY_URL --public-url "$PUBLIC_REPO_URL"
 
-sync-release:
+publish-github-release:
     cache: {}
     stage: public-release
     needs: [build]
