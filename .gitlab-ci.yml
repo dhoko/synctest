@@ -1,7 +1,7 @@
 stages:
     - build
     - mirror
-    - public-release
+    - release-public
 
 default:
     image: ubuntu:latest
@@ -61,7 +61,7 @@ sync-app:
 
 publish-github-release:
     cache: {}
-    stage: public-release
+    stage: release-public
     needs: [build]
     only:
         refs:
