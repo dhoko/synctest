@@ -68,4 +68,4 @@ release-github:
   extends: .release-make-release
   before_script:
     - csplit CHANGELOG.md '/^# \[/' '{*}' -z -f changelog-item
-    - mv changelog-item CHANGELOG-release.md
+    - mv changelog-item00 CHANGELOG-release.md
