@@ -63,6 +63,9 @@ release-github:
   stage: release
   when: always
   variables:
-    RELEASE_FILE: CHANGELOG.md
+    RELEASE_FILE: CHANGELOG-release.md
     RELEASE_FILES_UPLOAD: atlas.zsh-theme
   extends: .release-make-release
+  before_script:
+    - csplit CHANGELOG.md '/^# \[/' '{*}' -z -f changelog-item
+    - mv changelog-item CHANGELOG-release.md
