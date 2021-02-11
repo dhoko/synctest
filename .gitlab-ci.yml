@@ -18,15 +18,10 @@ sync-github:
   cache: {}
   only:
     - master
-    - tags
   before_script:
     # CI often uses a before_script we use this to reset it for this job
     - apt-get -y update
     - apt install -y connect-proxy gawk git bash
-    - perl --version
-    - awk --version
-    - bash --version
-    - git --version
     - 'which ssh-agent || apt-get -y install openssh-client'
     - eval $(ssh-agent -s)
     - echo "$CI_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -50,9 +45,18 @@ sync-github:
     - git config --global user.email $GIT_CI_EMAIL
     - git config --global user.name $GIT_CI_USERNAME
     - git config --global url."https://".insteadOf git://
-  script:
     - git remote add github "$RELEASE_GITHUB_REPOSITORY"
-    - git push github master
+    - git remote -v
+  script:
+    - git checkout master
+    - git push github HEAD:master
+
+sync-tag-github:
+  extends: sync-github
+  only:
+    - tags
+  script:
+    - git push github $CI_COMMIT_TAG
 
 # When we tag
 release-github:
