@@ -21,7 +21,7 @@ build-rpm-prod:
   script:
     - echo 123
 
-build-rpm-prod:
+bundle-prod:
   stage: bundle
   image: ubuntu:latest
   only:
