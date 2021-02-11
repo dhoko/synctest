@@ -19,6 +19,7 @@ build-rpm-prod:
   variables:
     GIT_STRATEGY: 'none'
   script:
+    - sleep 10
     - echo 123
 
 bundle-prod:
@@ -27,6 +28,7 @@ bundle-prod:
   only:
     - tags
   script:
+    - sleep 10
     - cp CHANGELOG.md webapp-bundle.tar.gz
   artifacts:
     expire_in: 1 day
