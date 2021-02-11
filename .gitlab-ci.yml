@@ -1,0 +1,64 @@
+include:
+  - project: 'agarroux/publish-github'
+    ref: feat/github-app
+    file: '/jobs/release.gitlab-ci.yml'
+
+variables:
+  RELEASE_GITHUB_REPOSITORY: git@github.com:dhoko/synctest.git
+
+stages:
+  - code
+  - release
+
+
+# on master
+sync-github:
+  stage: code
+  image: debian:testing-slim
+  cache: {}
+  only:
+    - master
+    - tags
+  before_script:
+    # CI often uses a before_script we use this to reset it for this job
+    - apt-get -y update
+    - apt install -y connect-proxy gawk git bash
+    - perl --version
+    - awk --version
+    - bash --version
+    - git --version
+    - 'which ssh-agent || apt-get -y install openssh-client'
+    - eval $(ssh-agent -s)
+    - echo "$CI_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir ~/.ssh 2> /dev/null || true
+    - |
+      cat <<EOF > ~/.ssh/config
+      Host github.com
+          Hostname ssh.github.com
+          User git
+          Port 443
+          ProxyCommand connect-proxy -H $http_proxy %h %p
+      EOF
+    - ssh-keyscan -t rsa ${CI_SERVER_HOST} > ~/.ssh/known_hosts
+    ## ssh-keyscan doesn't support proxies so we can't fetch the fingerprint online
+    - |
+      cat <<EOF >> ~/.ssh/known_hosts
+      # ssh.github.com:443 SSH-2.0-babeld-2e9d163d
+      [ssh.github.com]:443 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+      EOF
+    - cat ~/.ssh/config
+    - git config --global user.email $GIT_CI_EMAIL
+    - git config --global user.name $GIT_CI_USERNAME
+    - git config --global url."https://".insteadOf git://
+  script:
+    - git remote add github "$RELEASE_GITHUB_REPOSITORY"
+    - git push github master
+
+# When we tag
+release-github:
+  stage: release
+  when: always
+  variables:
+    RELEASE_FILE: CHANGELOG.MD
+    RELEASE_FILES_UPLOAD: atlas.zsh-theme
+  extends: .release-make-release
