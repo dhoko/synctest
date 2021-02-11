@@ -63,6 +63,6 @@ release-github:
   stage: release
   when: always
   variables:
-    RELEASE_FILE: CHANGELOG.MD
+    RELEASE_FILE: CHANGELOG.md
     RELEASE_FILES_UPLOAD: atlas.zsh-theme
   extends: .release-make-release
